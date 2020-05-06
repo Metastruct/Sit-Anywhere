@@ -41,7 +41,7 @@ hook.Add("KeyPress","seats_use",function(ply,key)
 	local ang = trace.HitNormal:Angle() + Angle(-270, 0, 0)
 
 
-	if trace.Hit and trace.HitPos:Distance(trace.StartPos) < 80 and math.abs(ang.pitch) <= 15 then
+	if trace.Hit then
 		RunConsoleCommand("sit")
 	end
 end)
