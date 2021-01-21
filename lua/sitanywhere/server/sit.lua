@@ -335,7 +335,6 @@ function META.Sit(ply, EyeTrace, ang, parent, parentbone, func, exit, wantedAng)
 		ent = EyeTrace.Entity
 		if IsValid(ent:GetVehicle()) then return end
 		if IsValid(ent.holder) and ent.GetTargetPlayer and ent:GetTargetPlayer() == ent then return end
-
 		if ent:GetInfoNum("sitting_disallow_on_me",0) == 1 then
 			ply:ChatPrint(ent:Name() .. " has disabled sitting!")
 			return

@@ -6,7 +6,7 @@ ENT.Spawnable = false
 ENT.RenderGroup = RENDERGROUP_OPAQUE
 
 ENT.PhysShadowControl = {
-    secondstoarrive = 0.01,
+    secondstoarrive = 0.1,
     pos = Vector(0, 0, 0),
     angle = Angle(0, 0, 0),
     maxspeed = 1000000,
@@ -53,9 +53,22 @@ function ENT:Think()
             self:AddToMotionController(pyo)
             pyo:Wake()
         end
-    elseif self:GetActivated() then
-        if not IsValid(self:GetSeat()) or not IsValid(self:GetTargetPlayer()) then
+    end
+    if self:GetActivated() then
+        if SERVER and (not IsValid(self:GetSeat()) or not IsValid(self:GetTargetPlayer())) then
             SafeRemoveEntity(self)
+        end
+
+        local ent, seat = self:GetTargetPlayer(), self:GetSeat()
+        if self:GetActivated() and IsValid(ent) and IsValid(seat) then
+            local tPos, tAng = LocalToWorld(self:GetTargetLocalPos(), self:GetTargetLocalAng(), ent:GetPos(), ent:GetRenderAngles())
+            --self:SetPos(tPos)
+            --self:SetAngles(tAng)
+
+            if CLIENT then
+                seat:SetRenderOrigin(tPos)
+                seat:SetRenderAngles(tAng)
+            end
         end
     end
 end
@@ -101,40 +114,6 @@ if CLIENT then
     function ENT:Draw()
 
     end
-
-    hook.Add("CalcView", "SitAnywhereFollow", function(ply, pos, angles, fov )
-        local veh = ply:GetVehicle()
-
-        if ply ~= LocalPlayer() or not IsValid(veh) or not IsValid(veh:GetParent()) or veh:GetParent():GetClass() ~= "sit_holder" then return end
-
-        local holder = veh:GetParent()
-        if not holder.GetActivated or not holder:GetActivated() then return end
-        local tPos, _ = LocalToWorld(holder:GetTargetLocalPos(), holder:GetTargetLocalAng(), ply:GetPos(), ply:GetRenderAngles())
-
-        local bottom, top = ply:GetHull()
-        local diff = top.Z - bottom.Z
-        tPos.z = tPos.z - diff * 0.65
-
-        local tAng = ply:EyeAngles()
-        tAng.y = tAng.y - 180
-        local view
-        if veh:GetThirdPersonMode() then
-            view = {
-                origin = tPos - ( tAng:Forward() * 100 ),
-                angles = tAng,
-                fov = fov,
-                drawviewer = true
-            }
-        else
-            view = {
-                origin = tPos,
-                angles = tAng,
-                fov = fov,
-                drawviewer = false
-            }
-        end
-        return view
-    end)
 end
 --easylua.EndEntity()
 
