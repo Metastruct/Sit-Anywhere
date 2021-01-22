@@ -24,6 +24,7 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
+    self:AddEFlags(EFL_NO_DISSOLVE)
 
     if SERVER then
         local phys = self:GetPhysicsObject()
