@@ -35,7 +35,15 @@ end)
 
 
 local function Sit(ply, pos, ang, parent, parentbone,  func, exit)
-	ply:ExitVehicle()
+	if IsValid(ply:GetVehicle()) then
+		local veh = ply:GetVehicle()
+		if veh:GetClass() == "prop_vehicle_prisoner_pod" and IsValid(veh.holder) then
+			SafeRemoveEntity(veh.holder)
+		end
+		ply:ExitVehicle()
+	end
+
+
 	local function getHolders(pl)
 		local holders = {}
 		for _, v in pairs(ents.FindByClass("sit_holder")) do
@@ -371,12 +379,12 @@ function META.Sit(ply, EyeTrace, ang, parent, parentbone, func, exit, wantedAng)
 		local zadjust = math.abs( min.z ) + math.abs( max.z )
 		local seatPos = ent:GetPos() + Vector( 0, 0, 10 + zadjust / 2)
 
-		do
+		--[[do
 			local bone = ent:LookupBone("ValveBiped.Bip01_Neck1")
 			if bone then
 				seatPos = ent:GetBonePosition(bone) - Vector(0, 0, 9)
 			end
-		end
+		end]]
 
 		local vehicle = Sit(ply, seatPos, ply:GetAngles(), ent, EyeTrace.PhysicsBone or 0)
 
