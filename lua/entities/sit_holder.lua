@@ -89,6 +89,7 @@ function ENT:Think()
                     end
                 end
             end
+            if not IsValid(holder) or not IsValid(targetPly) then return end
             local tPos, tAng = LocalToWorld(holder:GetTargetLocalPos(), holder:GetTargetLocalAng(), targetPly:GetPos(), targetPly:GetRenderAngles())
             seat:SetRenderOrigin(tPos)
             seat:SetRenderAngles(tAng)
