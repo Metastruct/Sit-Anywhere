@@ -66,7 +66,7 @@ function ENT:Think()
         local seat = self:GetSeat()
         if CLIENT and IsValid(seat)  then
             local holder, targetPly = self, self:GetTargetPlayer()
-            if not seat.RenderOverride then
+            --[[if not seat.RenderOverride then
                 seat.RenderOverride = function(sSeat)
                     if not sSeat.Draw then return end
                     if not IsValid(holder) or not IsValid(targetPly) then sSeat:Draw() return end
@@ -76,7 +76,7 @@ function ENT:Think()
                     sSeat:SetRenderAngles(tAng)
                     sSeat:Draw()
                 end
-            end
+            end]]
             local function drawChildren(seatToCheck, depth)
                 depth = (depth or 0) + 1
                 for k,v in pairs(seatToCheck:GetChildren()) do
