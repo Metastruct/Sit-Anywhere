@@ -39,3 +39,8 @@ luac.out
 *.x86_64
 *.hex
 
+*.gma
+pygit_logger.log
+lastcommit.txt
+tests/*.lua
+.vscode/*.json
